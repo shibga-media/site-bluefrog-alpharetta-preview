@@ -46,7 +46,7 @@ def layout(path, title, desc, h1, body, schema=True):
         ld = f'<script type="application/ld+json">{json.dumps(d)}</script>'
     return f"""<!doctype html><html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(title)}</title><meta name="description" content="{E(desc)}">
-<!-- PHONE {C.PHONE} = {C.PHONE_STATUS} (SEF number; 770-927-8328 and (678) 590-3764 also exist). Service list = placeholder pending client confirmation. DRAFT PREVIEW, noindex. -->
+<!-- PHONE {C.PHONE} = {C.PHONE_STATUS} (SEF number; other candidate numbers listed in README). Service list = placeholder pending client confirmation. DRAFT PREVIEW, noindex. -->
 {robots}<link rel="canonical" href="{canon}">{ld}<style>{CSS}</style></head><body>
 <div class="ribbon">DRAFT PREVIEW - not a live website - phone number and service list pending client confirmation</div>
 <div class="util"><div class="wrap"><span>Plumbing in Alpharetta, Johns Creek, Sandy Springs, Cumming and Milton, GA</span><a href="{TEL}">Call {C.PHONE}</a></div></div>
