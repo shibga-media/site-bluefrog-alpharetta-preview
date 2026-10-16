@@ -4,8 +4,8 @@ Words: content.py + copy.json. Layout follows Shibga's default template (site 1)
 hero with one CTA, service tiles, why-us, areas, CTA band, footer."""
 import html, json, os, shutil
 import content as C
-# THE SWITCH. False = every page noindex,nofollow + robots.txt blocks all. Flip only after Shib approves.
-INDEXABLE = False
+# THE SWITCH. False = noindex. Flipped to True 16 Oct 2026 (Shib: launch the campaign).
+INDEXABLE = True
 ROOT = os.path.dirname(os.path.abspath(__file__)); OUT = os.path.join(ROOT, "docs")
 E = html.escape; B = C.BASE; N = C.BUSINESS_NAME
 TEL = f"tel:{C.PHONE_TEL}"
@@ -46,15 +46,13 @@ def layout(path, title, desc, h1, body, schema=True):
         ld = f'<script type="application/ld+json">{json.dumps(d)}</script>'
     return f"""<!doctype html><html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>{E(title)}</title><meta name="description" content="{E(desc)}">
-<!-- PHONE {C.PHONE} = {C.PHONE_STATUS} (SEF number; other candidate numbers listed in README). Service list = placeholder pending client confirmation. DRAFT PREVIEW, noindex. -->
 {robots}<link rel="canonical" href="{canon}">{ld}<style>{CSS}</style></head><body>
-<div class="ribbon">DRAFT PREVIEW - not a live website - phone number and service list pending client confirmation</div>
 <div class="util"><div class="wrap"><span>Plumbing in Alpharetta, Johns Creek, Sandy Springs, Cumming and Milton, GA</span><a href="{TEL}">Call {C.PHONE}</a></div></div>
-<header class="top"><div class="wrap"><a class="brand" href="{B}/">{E(N)}</a><nav>{nav}</nav><a class="btn" href="{TEL}" data-phone-status="pending-client-confirmation">Call Now</a></div></header>
+<header class="top"><div class="wrap"><a class="brand" href="{B}/">{E(N)}</a><nav>{nav}</nav><a class="btn" href="{TEL}">Call Now</a></div></header>
 {body}
 <section class="band"><div class="wrap"><h2>Need a plumber in North Fulton or Forsyth?</h2><p>Call to book an appointment.</p><a class="btn" href="{TEL}">Call {C.PHONE}</a></div></section>
 <footer><div class="wrap"><strong style="color:#fff">{E(N)}</strong> - plumbing. {C.ADDRESS}.<br>
-Service areas: {", ".join(c for _,c in C.AREAS)}.<br><a href="{TEL}">{C.PHONE}</a> - <a href="{B}/contact/">Contact</a> - <a href="{B}/service-areas/">Service areas</a><br>Draft preview - not a live website.</div></footer>
+Service areas: {", ".join(c for _,c in C.AREAS)}.<br><a href="{TEL}">{C.PHONE}</a> - <a href="{B}/contact/">Contact</a> - <a href="{B}/service-areas/">Service areas</a></div></footer>
 <div class="float"><a href="{TEL}">Call</a><a href="{B}/contact/">Contact</a></div></body></html>"""
 
 def write(path, html_):
@@ -101,6 +99,9 @@ def build():
     write("/contact/", layout("/contact/", f"Contact {N} | Call for a Plumber", f"Call {N} to book a plumbing appointment in Alpharetta, Johns Creek, Sandy Springs, Cumming or Milton, GA.", "", f'<section class="s"><div class="wrap body"><h1>Contact {E(N)}</h1><p>The fastest way to reach us is to call. Tell us what is happening with your plumbing and we will book an appointment. There is no online form.</p><p style="font-size:1.4rem"><strong>{C.PHONE}</strong></p><p><strong>Office:</strong> {C.ADDRESS}</p><p><a class="btn" href="{TEL}">Call {C.PHONE}</a></p><p>We serve: {", ".join(c for _,c in C.AREAS)}.</p></div></section>', schema=True))
     write("/404.html".replace("/404.html","/404"), "<!doctype html><meta name=robots content='noindex,nofollow'><title>Not found</title><p>Page not found. <a href='%s/'>Home</a>" % B)
     shutil.move(os.path.join(OUT,"404","index.html"), os.path.join(OUT,"404.html")); os.rmdir(os.path.join(OUT,"404"))
-    open(os.path.join(OUT,"robots.txt"),"w").write("User-agent: *\n" + ("Allow: /\n" if INDEXABLE else "Disallow: /\n"))
+    open(os.path.join(OUT,"robots.txt"),"w").write("User-agent: *\n" + (("Allow: /\nSitemap: "+C.SITE_URL+"/sitemap.xml\n") if INDEXABLE else "Disallow: /\n"))
+    if INDEXABLE:
+        open(os.path.join(OUT,"sitemap.xml"),"w").write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+"".join(f"<url><loc>{C.SITE_URL}{p}</loc></url>\n" for p in ["/"]+[p for p in pages if p!="/"])+"</urlset>\n")
+    open(os.path.join(OUT,"CNAME"),"w").write("bluefrogplumbingofalpharetta.com\n")
     print(len(pages), "pages built; INDEXABLE =", INDEXABLE)
 if __name__ == "__main__": build()

@@ -1,12 +1,12 @@
-"""All words and facts for the preview site. Edit here, run build.py. Public repo: no private data."""
+"""All words and facts for the site. Edit here, run build.py. Public repo: no private data."""
 import json, os
 BUSINESS_NAME = "Bluefrog Plumbing + Drain of Alpharetta"   # Brian Kingsley's own spelling (onboarding call 13 Oct 2026). Text only: no corporate logo.
-PHONE = "(404) 386-0203"                   # PENDING CLIENT CONFIRMATION: SEF number. Other numbers exist: 770-927-8328 (call), (678) 590-3764 (franchise page). Swap here only.
-PHONE_TEL = "+14043860203"                 # PENDING CLIENT CONFIRMATION (same as above)
-PHONE_STATUS = "PENDING CLIENT CONFIRMATION"
+PHONE = "(678) 331-5843"                   # CallScaler tracking number (bought 16 Oct 2026); forwards to the business line.
+PHONE_TEL = "+16783315843"
+PHONE_STATUS = "tracking number"
 ADDRESS = "1007 Mansell Rd #A122, Roswell, GA 30076"
-SITE_URL = "https://shibga-media.github.io/site-bluefrog-alpharetta-preview"
-BASE = "/site-bluefrog-alpharetta-preview"
+SITE_URL = "https://bluefrogplumbingofalpharetta.com"
+BASE = ""
 COPY = json.load(open(os.path.join(os.path.dirname(os.path.abspath(__file__)), "copy.json")))
 
 # SERVICE LIST = PLACEHOLDER. The SEF and the onboarding call say only "plumbing". Standard residential categories used, to be confirmed with Brian.
